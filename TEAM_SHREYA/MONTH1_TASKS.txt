@@ -1,0 +1,356 @@
+================================================================================
+SHREYA - MONTH 1: KNOWLEDGE GRAPH CONSTRUCTION
+================================================================================
+
+PRIMARY ROLE: Knowledge Graph Engineering & Graph Reasoning
+TIMELINE: Month 1 (First Month)
+
+================================================================================
+TASK 1: KNOWLEDGE GRAPH SCHEMA DESIGN
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 1.1 - Design NODE TYPES (entities)
+        - Molecule
+        - Protein/Target
+        - Disease
+        - PathwayStep
+        - BiologicalActivity
+        - ChemicalReaction
+        - DrugApprovalStatus
+        Output file: node_schema.txt
+        
+  [ ] 1.2 - Design EDGE TYPES (relationships)
+        - molecule:TARGETS:protein
+        - molecule:HAS_ACTIVITY:bioactivity
+        - protein:INVOLVED_IN:pathway
+        - protein:ASSOCIATED_WITH:disease
+        - molecule:HAS_TOXICITY:toxicity_alert
+        - molecule:SIMILAR_TO:molecule (similarity)
+        - molecule:DERIVED_FROM:molecule (parent-child)
+        Output file: edge_schema.txt
+
+  [ ] 1.3 - Design PROPERTIES for nodes and edges
+        - Node properties: ID, name, description, source, confidence
+        - Edge properties: weight, score, evidence, publication
+        Output file: property_schema.txt
+
+  [ ] 1.4 - Finalize ontology structure
+        - Entity hierarchy
+        - Property types and ranges
+        - Constraint definitions
+        Output file: ontology_definition.txt
+
+================================================================================
+TASK 2: KNOWLEDGE GRAPH DATA INTEGRATION
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 2.1 - Extract MOLECULAR DATA
+        - From ChEMBL: Canonical SMILES, ChEMBL ID, synonyms
+        - From Vishwa's preprocessed data: Properties, classifications
+        - Create Molecule nodes
+        Output file: molecule_extraction.py
+        Data: molecules_kg.csv
+
+  [ ] 2.2 - Extract PROTEIN/TARGET DATA
+        - From ChEMBL: Target information, UniProt IDs
+        - From UniProt API: Protein sequences, families
+        - Create Protein nodes with metadata
+        Output file: protein_extraction.py
+        Data: proteins_kg.csv
+
+  [ ] 2.3 - Extract BIOACTIVITY DATA
+        - From ChEMBL: IC50, pIC50, assay data
+        - Link molecules to proteins via bioactivity
+        - Create edges: molecule-[TARGETS]-protein
+        - Include confidence scores
+        Output file: bioactivity_linking.py
+        Data: bioactivity_edges.csv
+
+  [ ] 2.4 - Extract PATHWAY DATA
+        - From KEGG, Reactome, or pathway databases
+        - Map proteins to pathways
+        - Create: protein-[INVOLVED_IN]-pathway edges
+        Output file: pathway_extraction.py
+        Data: pathway_edges.csv
+
+  [ ] 2.5 - Extract TOXICITY DATA
+        - Structural alerts
+        - Known toxicity patterns
+        - Link to molecules: molecule-[HAS_TOXICITY]-alert
+        Output file: toxicity_linking.py
+        Data: toxicity_edges.csv
+
+  [ ] 2.6 - Extract DISEASE ASSOCIATIONS
+        - From ChEMBL: Disease indications
+        - Map proteins to diseases
+        - Create: protein-[ASSOCIATED_WITH]-disease edges
+        Output file: disease_linking.py
+        Data: disease_edges.csv
+
+================================================================================
+TASK 3: GRAPH DATABASE SETUP & LOADING
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 3.1 - Set up graph database
+        - Use Neo4j (already have: graph_db/ folder setup)
+        - Configure database connection
+        - Set authentication
+        Output file: graph_db_config.txt
+
+  [ ] 3.2 - Create CYPHER QUERIES for ingestion
+        - Bulk load molecules
+        - Bulk load proteins
+        - Bulk load bioactivity relationships
+        - Bulk load pathway relationships
+        Output file: ingestion_queries.cypher
+
+  [ ] 3.3 - Load data into graph database
+        - Execute ingestion queries
+        - Verify data load counts
+        - Create indexes for query performance
+        Output file: data_load_report.txt
+
+  [ ] 3.4 - Add SIMILARITY RELATIONSHIPS
+        - Calculate molecule similarity (Tanimoto distance)
+        - Add similar molecule edges
+        - Store similarity scores
+        Output file: similarity_calculator.py
+        Data: similarity_edges.csv
+
+================================================================================
+TASK 4: GRAPH TRAVERSAL & QUERYING
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 4.1 - Implement graph traversal functions
+        - Find similar molecules
+        - Find molecules targeting a protein
+        - Find proteins in a pathway
+        - Find diseases associated with proteins
+        Output file: graph_traversal.py
+        Directory: graph_db/
+
+  [ ] 4.2 - Implement complex queries
+        - Q1: Find all molecules similar to X that target Y protein
+        - Q2: Find alternative proteins for disease D
+        - Q3: Find potential off-targets for molecule M
+        - Q4: Find pathway involvement for molecule M
+        Output file: complex_queries.py
+        Directory: graph_db/
+
+  [ ] 4.3 - Add query optimization
+        - Create appropriate indexes
+        - Query execution plans
+        - Performance benchmarking
+        Output file: query_optimization_report.txt
+
+  [ ] 4.4 - Query API wrapper
+        - REST API for common queries
+        - Error handling
+        - Response formatting
+        Output file: graph_query_api.py
+        Directory: graph_db/
+
+================================================================================
+TASK 5: GRAPH EMBEDDINGS FOR REASONING
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 5.1 - Implement GRAPH EMBEDDING techniques
+        - Node2Vec: Learn node embeddings
+        - DeepWalk: Random walk-based embeddings
+        - GraphSAGE: Sampling and aggregating
+        Output file: graph_embeddings.py
+        Directory: graph_db/
+
+  [ ] 5.2 - Train embeddings on knowledge graph
+        - Set embedding dimension: 128 or 256
+        - Train on molecule, protein, pathway nodes
+        - Store embeddings for retrieval
+        Output: embeddings.pkl
+
+  [ ] 5.3 - Similarity search using embeddings
+        - Cosine similarity between nodes
+        - Find similar molecules via embedding space
+        - Find relevant proteins via embedding space
+        Output file: embedding_similarity_search.py
+
+  [ ] 5.4 - Embedding-based recommendations
+        - Given molecule M, find similar molecules
+        - Given protein P, find related proteins
+        - Given disease D, find relevant targets
+        Output file: recommendation_engine.py
+
+================================================================================
+TASK 6: GRAPH-BASED REASONING ENGINE
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 6.1 - Implement path-based reasoning
+        - Find logical paths in graph
+        - Explain molecule-disease connections
+        - Trace evidence chains
+        Output file: path_reasoning.py
+
+  [ ] 6.2 - Implement knowledge inference
+        - Infer new edges based on paths
+        - Propagate confidence scores
+        - Detect contradictions
+        Output file: knowledge_inference.py
+
+  [ ] 6.3 - Reasoning for bioactivity prediction
+        - Use graph structure to explain predictions
+        - Find similar molecules with known activity
+        - Infer activity for new molecules
+        Output file: bioactivity_reasoning.py
+
+  [ ] 6.4 - Reasoning for toxicity prediction
+        - Identify structural alerts in graph context
+        - Find similar toxic molecules
+        - Infer toxicity risks
+        Output file: toxicity_reasoning.py
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+
+TEAM_SHREYA/
+  ├── MONTH1_TASKS.txt (this file)
+  ├── schema/
+  │   ├── node_schema.txt
+  │   ├── edge_schema.txt
+  │   ├── property_schema.txt
+  │   └── ontology_definition.txt
+  ├── extraction/
+  │   ├── molecule_extraction.py
+  │   ├── protein_extraction.py
+  │   ├── bioactivity_linking.py
+  │   ├── pathway_extraction.py
+  │   ├── toxicity_linking.py
+  │   └── disease_linking.py
+  ├── data/
+  │   ├── molecules_kg.csv
+  │   ├── proteins_kg.csv
+  │   ├── bioactivity_edges.csv
+  │   ├── pathway_edges.csv
+  │   ├── toxicity_edges.csv
+  │   └── disease_edges.csv
+  ├── database/
+  │   ├── graph_db_config.txt
+  │   ├── ingestion_queries.cypher
+  │   └── data_load_report.txt
+  ├── traversal/
+  │   ├── graph_traversal.py
+  │   ├── complex_queries.py
+  │   ├── query_optimization_report.txt
+  │   └── graph_query_api.py
+  ├── embeddings/
+  │   ├── graph_embeddings.py
+  │   ├── embedding_similarity_search.py
+  │   └── recommendation_engine.py
+  ├── reasoning/
+  │   ├── path_reasoning.py
+  │   ├── knowledge_inference.py
+  │   ├── bioactivity_reasoning.py
+  │   └── toxicity_reasoning.py
+  └── progress_log.txt
+
+================================================================================
+DELIVERABLES FOR MONTH 1
+================================================================================
+
+Schema outputs:
+  ✓ node_schema.txt
+  ✓ edge_schema.txt
+  ✓ property_schema.txt
+  ✓ ontology_definition.txt
+
+Data extraction & linking:
+  ✓ molecule_extraction.py
+  ✓ protein_extraction.py
+  ✓ bioactivity_linking.py
+  ✓ pathway_extraction.py
+  ✓ toxicity_linking.py
+  ✓ disease_linking.py
+
+Data outputs:
+  ✓ molecules_kg.csv (minimum 50k rows)
+  ✓ proteins_kg.csv
+  ✓ bioactivity_edges.csv
+  ✓ pathway_edges.csv
+  ✓ toxicity_edges.csv
+  ✓ disease_edges.csv
+
+Database & querying:
+  ✓ graph_db_config.txt
+  ✓ ingestion_queries.cypher
+  ✓ data_load_report.txt
+  ✓ graph_traversal.py
+  ✓ complex_queries.py
+  ✓ graph_query_api.py
+
+Embeddings & reasoning:
+  ✓ graph_embeddings.py
+  ✓ embeddings.pkl
+  ✓ embedding_similarity_search.py
+  ✓ path_reasoning.py
+  ✓ knowledge_inference.py
+
+Documentation:
+  ✓ month1_completion_report.txt
+
+================================================================================
+DEPENDENCIES & COORDINATION
+================================================================================
+
+From Pranay:
+  - System architecture (for KG integration points)
+  - Research problem (for scope and reasoning needs)
+
+From Vishwa:
+  - Cleaned molecule data (for molecule node creation)
+  - SMILES standardization (for linking)
+  - Feature/property data (for node attributes)
+
+================================================================================
+PROGRESS TRACKING
+================================================================================
+
+Week 1: Complete Tasks 1 (Schema Design)
+        - Design finalized, ontology defined
+        Output: Complete schema documentation
+
+Week 2: Complete Task 2 (Data Extraction & Linking)
+        - Extract data from multiple sources
+        Output: CSV files ready for ingestion
+
+Week 3: Complete Tasks 3-4 (Database & Querying)
+        - KG loaded, queryable, indexed
+        Output: Working graph database with sample queries
+
+Week 4: Complete Tasks 5-6 (Embeddings & Reasoning)
+        - Embeddings trained, reasoning engine working
+        Output: Month 1 completion report
+
+Milestones:
+  - End of Week 1: Schema finalized + ontology document
+  - End of Week 2: 50k+ molecules, 10k+ proteins, 100k+ edges extracted
+  - End of Week 3: Graph loaded into Neo4j, 10+ query patterns working
+  - End of Week 4: Embeddings trained, reasoning engine functional
+
+Performance targets:
+  - Query response time: < 100ms for simple queries
+  - Graph size: 50k-100k nodes, 200k+ edges
+  - Embedding quality: > 0.8 similarity for semantically related entities
+
+Last Updated: 2026-02-02
+Next Review: Weekly

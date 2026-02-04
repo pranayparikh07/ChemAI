@@ -1,0 +1,281 @@
+================================================================================
+PRANAY - RESEARCH PROBLEM FORMULATION
+================================================================================
+
+DOCUMENT: Problem Statement & Research Hypotheses
+Date: February 2, 2026
+
+================================================================================
+PRIMARY RESEARCH PROBLEM
+================================================================================
+
+Problem Statement:
+-----------------
+
+"Current AI-driven drug discovery systems lack causal reasoning and autonomous 
+decision-making capabilities, leading to inefficient drug candidate generation 
+and poor explainability. We need an integrated system that combines:
+
+1. Mechanistic understanding of drug-target interactions
+2. Autonomous feedback loops for continuous learning
+3. Knowledge graph reasoning for multi-source integration
+4. Explainable predictions for regulatory compliance
+
+This will enable 10-100x faster drug discovery with better candidates and 
+higher success rates."
+
+Specific Challenges:
+  1. How to integrate causal reasoning into ML models?
+  2. How to create autonomous feedback loops?
+  3. How to combine multiple knowledge sources effectively?
+  4. How to explain predictions mechanistically?
+  5. How to scale to large chemical spaces?
+
+Impact:
+  • Reduce drug discovery time from 10-15 years to 3-5 years
+  • Reduce cost from $2.6B to <$500M per drug
+  • Improve success rate from 12% to 40%+
+  • Enable personalized medicine discovery
+
+================================================================================
+RESEARCH HYPOTHESES
+================================================================================
+
+HYPOTHESIS 1: Causal Reasoning Improves Drug Discovery
+-----------------
+Statement: 
+  "Integrating causal reasoning via knowledge graphs will improve drug candidate 
+  quality by 40% and reduce off-target effects by 50% compared to correlation-
+  based approaches."
+
+Rationale:
+  • Current systems only learn patterns, not mechanisms
+  • Understanding WHY improves generalization
+  • Domain knowledge can be encoded in causal graphs
+  • Regulatory bodies prefer mechanistic understanding
+
+Test Method:
+  1. Train two systems: (a) correlation-based, (b) causal KG-based
+  2. Generate 1000 candidates each
+  3. Compare: bioactivity, selectivity, toxicity, synthesizability
+  4. Measure regulatory acceptance rate
+
+Success Metric: >40% improvement in candidate quality
+
+HYPOTHESIS 2: Autonomous Feedback Loops Enable Continuous Learning
+-----------------
+Statement:
+  "Autonomous feedback loops with long-term memory will improve predictions by 
+  30% after 5 discovery cycles, as the system learns from successes and failures."
+
+Rationale:
+  • Current systems don't learn from past outcomes
+  • Feedback is critical for optimization
+  • Multi-generation learning compounds improvements
+  • Autonomous loops can run faster than human-guided discovery
+
+Test Method:
+  1. Run discovery for 5 generations with feedback
+  2. Measure improvement at each generation
+  3. Compare to non-learning baseline
+  4. Track what strategies emerge
+
+Success Metric: >30% cumulative improvement, detectable strategy changes
+
+HYPOTHESIS 3: Knowledge Graph Integration Increases Prediction Accuracy
+-----------------
+Statement:
+  "Integrating diverse knowledge sources via KG will improve bioactivity 
+  predictions by 25% and toxicity predictions by 40% compared to single-source 
+  models."
+
+Rationale:
+  • More data = better predictions (if integrated well)
+  • Cross-domain patterns reveal insights
+  • Context from biology improves safety
+  • Graph structure captures relationships
+
+Test Method:
+  1. Build models using: (a) only SMILES, (b) + properties, (c) + KG data
+  2. Test on 5000 hold-out molecules
+  3. Compare RMSE, MAE, R² metrics
+  4. Measure toxicity prediction improvement
+
+Success Metric: 25% bioactivity, 40% toxicity improvement
+
+HYPOTHESIS 4: Explainability Improves Expert Trust & Regulatory Approval
+-----------------
+Statement:
+  "Explainable predictions based on causal paths will increase expert 
+  validation speed by 50% and regulatory approval likelihood by 60%."
+
+Rationale:
+  • Experts trust what they understand
+  • Regulatory bodies require justification
+  • Explanations enable error detection
+  • Transparency builds confidence
+
+Test Method:
+  1. Generate predictions with and without explanations
+  2. Have chemists validate 100 candidates each version
+  3. Measure time to validate, acceptance rate, questions asked
+  4. Submit to regulatory board for review
+
+Success Metric: 50% faster validation, 60% approval increase
+
+HYPOTHESIS 5: Multi-Objective Optimization Generates Superior Candidates
+-----------------
+Statement:
+  "Explicit multi-objective optimization will generate candidates that pass 
+  all drug-likeness criteria 3x more often than single-objective optimization."
+
+Rationale:
+  • Drugs must succeed on multiple fronts
+  • Simple weighting loses important nuance
+  • Pareto optimization explores tradeoffs
+  • Better balance = better molecules
+
+Test Method:
+  1. Generate 1000 candidates with: (a) weighted sum, (b) Pareto optimization
+  2. Count molecules passing:
+     - Lipinski's Rule of 5
+     - QED > 0.6
+     - pIC50 > 6
+     - Toxicity risk = Low
+     - Synthetic accessibility score > 0.5
+  3. Compare pass rates
+
+Success Metric: 3x higher pass rate for Pareto approach
+
+HYPOTHESIS 6: Scalable Architecture Enables 100x Faster Evaluation
+-----------------
+Statement:
+  "Optimized computing pipeline with smart filtering will evaluate 100x more 
+  candidates in same time/cost as current approach."
+
+Rationale:
+  • Most candidates can be filtered quickly
+  • Expensive calculations should be last
+  • Hierarchical filtering = huge speedup
+  • Parallelization not yet optimized
+
+Test Method:
+  1. Benchmark current system: time/cost per candidate
+  2. Implement filtering pipeline
+  3. Measure: total candidates evaluated, pass rate, final quality
+  4. Compare time and cost
+
+Success Metric: 100x more candidates, same cost
+
+================================================================================
+SYSTEM REQUIREMENTS (Conceptual Level)
+================================================================================
+
+Core Components:
+  1. Molecular Generator
+     - Genetic algorithm-based (EXISTING)
+     - Uses domain knowledge constraints (NEW)
+     - Tracks diversity and novelty
+
+  2. Knowledge Graph
+     - 50k+ molecules, 10k+ proteins
+     - 200k+ relationships
+     - Causal edge types
+
+  3. Predictor
+     - ML models (EXISTING)
+     - Graph neural network (NEW)
+     - Uncertainty quantification (NEW)
+
+  4. Explainability Engine (NEW)
+     - Path-based explanations
+     - Mechanistic reasoning
+     - Counterfactual analysis
+
+  5. Orchestrator
+     - Autonomous decision loops
+     - Multi-agent coordination
+     - Learning and memory
+
+Data Flow:
+  Knowledge Sources → Knowledge Graph → Graph Embedding
+  Molecule SMILES → Generator → Predictor → Explainability
+  Predictions → Ranker → Optimizer → Feedback Loop
+  Feedback → Learning System → Strategy Update
+
+================================================================================
+EXPECTED OUTCOMES
+================================================================================
+
+Year 1 (Current):
+  ✓ Foundation: Dataset, KG, Agents
+  ✓ Basic predictions working
+  ✓ Multi-generation discovery demonstrated
+
+Year 2:
+  ✓ Causal reasoning integrated
+  ✓ Autonomous feedback loops working
+  ✓ 10x improvement in efficiency
+
+Year 3:
+  ✓ Full end-to-end system
+  ✓ Real drug candidate validation
+  ✓ Publication of results
+  ✓ 50-100x improvement in efficiency
+
+Long-term Impact:
+  • Multiple published compounds
+  • Validation in experimental labs
+  • Commercial applications
+  • New paradigm for drug discovery
+
+================================================================================
+RESEARCH NOVELTY
+================================================================================
+
+Existing Work:
+  • ML-based drug generation (many papers)
+  • Graph neural networks (well-established)
+  • Knowledge graphs in biomedics (growing field)
+  • Multi-objective optimization (standard technique)
+
+Novel Contributions:
+  1. Causal reasoning + autonomous agents for drug discovery
+  2. End-to-end KG integration with active learning
+  3. Feedback loops with long-term memory
+  4. Explainability through mechanistic paths
+  5. Real-time learning from feedback
+
+Competitive Advantage:
+  • More interpretable than end-to-end black boxes
+  • Faster than human-guided approaches
+  • Better causal understanding than correlation-based methods
+  • Autonomous and scalable
+
+================================================================================
+RISKS & MITIGATION
+================================================================================
+
+Risk 1: Causal reasoning too complex to implement
+  Mitigation: Start with domain knowledge, incrementally add inference
+
+Risk 2: Feedback loops create negative feedback (learn bad patterns)
+  Mitigation: Validation filters, diversity enforcement, human oversight
+
+Risk 3: Knowledge graph too expensive to build/maintain
+  Mitigation: Automated extraction, incremental construction, crowd-sourcing
+
+Risk 4: Explainability sacrifices predictive accuracy
+  Mitigation: Use ensemble methods, hybrid approaches
+
+Risk 5: Computational costs remain high
+  Mitigation: Aggressive filtering, hierarchical evaluation, cloud computing
+
+Risk 6: Regulatory bodies don't accept new paradigm
+  Mitigation: Extensive validation, publications, collaboration with pharma
+
+================================================================================
+Document Status: COMPLETE
+Author: Pranay
+Date Created: 2026-02-02
+Last Updated: 2026-02-02

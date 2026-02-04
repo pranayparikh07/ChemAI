@@ -1,0 +1,211 @@
+NEO4J QUICK START - First Time User Guide
+==========================================
+
+STEP 1: CONNECT TO YOUR REMOTE NEO4J
+─────────────────────────────────────────────────────────────
+
+Run this in PowerShell:
+
+cd d:\ChemAI\TEAM_SHREYA
+python load_to_neo4j.py
+
+Then enter:
+  1. Neo4j URI: bolt://[YOUR_REMOTE_IP]:7687
+     Example: bolt://192.168.1.100:7687
+  
+  2. Username: neo4j
+  
+  3. Password: [Your password]
+
+It will load sample data automatically (4 molecules, 3 proteins, 10 relationships)
+
+
+STEP 2: OPEN NEO4J BROWSER
+─────────────────────────────────────────────────────────────
+
+Open your browser and go to:
+  http://[YOUR_REMOTE_IP]:7474/browser/
+  
+  Example: http://192.168.1.100:7474/browser/
+
+You'll see Neo4j's visual interface.
+
+
+STEP 3: RUN QUERIES (Copy & Paste)
+─────────────────────────────────────────────────────────────
+
+In the Neo4j Browser's search box at top, paste these queries:
+
+Query 1: See all molecules and what proteins they target
+─────────────────────────────────────────────────────────
+MATCH (m:Molecule)-[r:TARGETS]->(p:Protein) 
+RETURN m, r, p
+
+Result: Visual graph showing:
+  • Blue circles = Molecules (Aspirin, Ibuprofen, etc.)
+  • Orange circles = Proteins (COX-1, COX-2, etc.)
+  • Arrows = TARGETS relationships with pIC50 scores
+
+
+Query 2: Find similar molecules
+─────────────────────────────────────────────────────────
+MATCH (m1:Molecule)-[r:SIMILAR_TO]->(m2:Molecule) 
+RETURN m1, r, m2
+
+Result: Shows molecules grouped by similarity (Tanimoto > 0.7)
+
+
+Query 3: Find what Aspirin targets
+─────────────────────────────────────────────────────────
+MATCH (m:Molecule {name: 'Aspirin'})-[r:TARGETS]->(p:Protein) 
+RETURN m, r, p
+
+Result: Aspirin connected to COX-1 and COX-2 with pIC50 values
+
+
+Query 4: Get molecule properties
+─────────────────────────────────────────────────────────
+MATCH (m:Molecule) 
+RETURN m.name, m.mw, m.qed, m.logp
+
+Result: Table of all molecules with their properties
+
+
+Query 5: Find most active molecule-protein pairs
+─────────────────────────────────────────────────────────
+MATCH (m:Molecule)-[r:TARGETS]->(p:Protein) 
+WHERE r.pic50 > 5.5 
+RETURN m.name, p.name, r.pic50 
+ORDER BY r.pic50 DESC
+
+Result: Top bioactive hits ranked by potency
+
+
+STEP 4: UNDERSTAND THE VISUALIZATION
+─────────────────────────────────────────────────────────────
+
+Node colors in Neo4j Browser:
+  🔵 Blue = Molecule nodes
+  🟠 Orange = Protein nodes
+  
+Edge types (arrows):
+  → TARGETS = molecule targets protein (has pIC50 score)
+  → SIMILAR_TO = molecule similar to molecule (has similarity score)
+
+Click on any node to see its properties:
+  • Name
+  • Molecular weight
+  • QED score
+  • Confidence
+  • Source database
+
+
+STEP 5: USEFUL TIPS
+─────────────────────────────────────────────────────────────
+
+View full details:
+  Click any node in the graph
+  Properties appear on right panel
+
+Export results:
+  After running query, click ⬇️ download icon
+  Save as JSON, CSV, or other format
+
+Write your own queries:
+  MATCH (n) RETURN n LIMIT 10
+  Shows first 10 nodes of any type
+
+Count data:
+  MATCH (m:Molecule) RETURN count(m)
+  Returns: 4 molecules
+
+Delete nodes (careful!):
+  MATCH (n:Molecule {name: 'Aspirin'}) DELETE n
+
+Add new data:
+  CREATE (m:Molecule {name: 'Imatinib', mw: 494.6})
+
+
+STEP 6: LOAD FULL DATA (When Ready)
+─────────────────────────────────────────────────────────────
+
+When you have the CSV files (molecules_kg.csv, proteins_kg.csv, etc.):
+
+Just run again:
+  python load_to_neo4j.py
+
+Answer 'y' when asked "Clear existing data?"
+
+This loads all 50,000 molecules + 10,000 proteins + 50,000 relationships
+
+
+TROUBLESHOOTING
+─────────────────────────────────────────────────────────────
+
+Issue: Connection refused
+Fix: Check URI is correct (bolt://IP:7687)
+     Make sure Neo4j is running on remote desktop
+
+Issue: Authentication failed
+Fix: Check username (usually 'neo4j')
+     Check password is correct
+
+Issue: Queries show "No results"
+Fix: Data not loaded yet
+     Run: python load_to_neo4j.py
+     Or run: MATCH (n) RETURN count(n)
+            to check if data exists
+
+Issue: Browser shows "Unable to connect"
+Fix: Use correct IP address
+     Make sure firewall allows port 7474
+     Try: http://IP:7474/browser/
+
+
+COMMON CYPHER PATTERNS
+─────────────────────────────────────────────────────────────
+
+Find all connections to a molecule:
+  MATCH (m:Molecule {name: 'Aspirin'})--(n)
+  RETURN m, n
+
+Find 2-hop paths (molecule → protein → other molecule):
+  MATCH (m1:Molecule)-[:TARGETS]->(p:Protein)-[:TARGETS]-(m2:Molecule)
+  RETURN m1, p, m2
+
+Get statistics:
+  MATCH (m:Molecule)
+  RETURN COUNT(m) as total_molecules
+
+Find high-potency targets:
+  MATCH (m:Molecule)-[r:TARGETS]->(p:Protein)
+  WHERE r.pic50 > 6.0
+  RETURN m.name as molecule, p.name as protein, r.pic50 as potency
+
+Filter by drug-likeness:
+  MATCH (m:Molecule)
+  WHERE m.qed > 0.7
+  RETURN m.name, m.qed, m.mw
+
+
+ONCE YOU'RE COMFORTABLE
+─────────────────────────────────────────────────────────────
+
+You can:
+  ✓ Run complex reasoning queries
+  ✓ Find drug candidates with specific properties
+  ✓ Identify off-target risks
+  ✓ Explore molecular similarity networks
+  ✓ Generate reports and analytics
+  ✓ Integrate with ML models
+
+
+READY?
+─────────────────────────────────────────────────────────────
+
+1. Run: python load_to_neo4j.py
+2. Enter remote Neo4j details
+3. Open: http://[IP]:7474/browser/
+4. Run first query above to see your knowledge graph!
+
+Questions? Copy any query above and run it - experiment!

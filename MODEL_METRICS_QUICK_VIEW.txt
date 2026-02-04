@@ -1,0 +1,149 @@
+# MODEL METRICS AT A GLANCE
+
+## Models and Their Metrics
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ BIOACTIVITY MODEL (Regression)                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Target: pIC50 (Bioactivity)                                             │
+│                                                                         │
+│ Accuracy:   ❌ N/A (Regression)                                         │
+│ F1-Score:   ❌ N/A (Regression)                                         │
+│ R²:         ✓  Primary metric (typical: 0.65-0.80)                     │
+│                                                                         │
+│ Also reports: RMSE, MAE                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ TOXICITY MODEL (Binary Classification)                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Target: Structural Alerts (Safe = 0, Toxic = 1)                        │
+│                                                                         │
+│ Accuracy:   ✓  Yes (typical: 0.80-0.92)                                │
+│ F1-Score:   ✓  Yes (typical: 0.75-0.88)                                │
+│ R²:         ✓  On probabilities (typical: 0.60-0.80)                   │
+│                                                                         │
+│ Also reports: Confusion Matrix, Precision, Recall, ROC-AUC             │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PROPERTY MODEL (Multi-target Regression)                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Targets: 7 Molecular Properties                                         │
+│   1. MW (Molecular Weight)                                              │
+│   2. LogP (Lipophilicity)                                               │
+│   3. HBA (H-Bond Acceptors)                                             │
+│   4. HBD (H-Bond Donors)                                                │
+│   5. PSA (Polar Surface Area)                                           │
+│   6. RTB (Rotatable Bonds)                                              │
+│   7. QED (Drug-likeness Score)                                          │
+│                                                                         │
+│ Accuracy:   ❌ N/A (Regression)                                         │
+│ F1-Score:   ❌ N/A (Regression)                                         │
+│ R²:         ✓  Per property (typical: 0.60-0.78 average)              │
+│                                                                         │
+│ Also reports: RMSE, MAE per property                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ QED MODEL (Regression)                                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Target: QED Score (0-1 scale, higher = more drug-like)                 │
+│                                                                         │
+│ Accuracy:   ❌ N/A (Regression)                                         │
+│ F1-Score:   ❌ N/A (Regression)                                         │
+│ R²:         ✓  Primary metric (typical: 0.70-0.85)                     │
+│                                                                         │
+│ Also reports: RMSE, MAE                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ DRUG-LIKENESS MODEL (Binary Classification)                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Target: Lipinski's Rule of 5 (Complies = 1, Violates = 0)             │
+│                                                                         │
+│ Accuracy:   ✓  Yes (typical: 0.85-0.95)                                │
+│ F1-Score:   ✓  Yes (typical: 0.80-0.92)                                │
+│ R²:         ✓  On probabilities (typical: 0.65-0.85)                   │
+│                                                                         │
+│ Also reports: Confusion Matrix, Precision, Recall                      │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Quick Lookup
+
+### ✓ Models with ACCURACY
+- Toxicity Model
+- Drug-likeness Model
+
+### ✓ Models with F1-SCORE  
+- Toxicity Model
+- Drug-likeness Model
+
+### ✓ All Models report R²
+- Bioactivity Model (primary)
+- Toxicity Model (on probabilities)
+- Property Model (per target, 7 values)
+- QED Model (primary)
+- Drug-likeness Model (on probabilities)
+
+---
+
+## Test Commands
+
+```bash
+# Get all metrics at once (RECOMMENDED)
+python models/comprehensive_model_testing.py
+
+# Get metrics for individual models
+python models/test_bioactivity_model.py
+python models/test_toxicity_model.py
+python models/test_property_model.py
+python models/test_druglikeness_model.py
+
+# Quick reference guide
+python METRICS_GUIDE.py
+```
+
+---
+
+## What the Numbers Mean
+
+### Accuracy (0-1 scale, higher is better)
+- 0.90+  = Excellent! Model is very accurate
+- 0.80   = Good, model performs well
+- 0.70   = Acceptable, but could be improved
+- <0.70  = Poor, needs improvement
+
+### F1-Score (0-1 scale, higher is better)
+- 0.90+  = Excellent balance between precision and recall
+- 0.80   = Good, balanced performance
+- 0.70   = Acceptable
+- <0.70  = Poor balance
+
+### R² (0-1 scale, higher is better)
+- 1.00   = Perfect fit (rarely happens)
+- 0.80+  = Excellent, explains 80%+ of variance
+- 0.70   = Good, explains 70% of variance
+- 0.50   = Moderate fit
+- <0.30  = Poor, avoid using
+
+---
+
+## Files for Reference
+
+| Want This | Read This |
+|-----------|-----------|
+| Full definitions | METRICS_REFERENCE.md |
+| Summary table | MODELS_METRICS_SUMMARY.md |
+| How to find metrics | FIND_MODEL_METRICS.md |
+| Model specifications | METRICS_GUIDE.py |
+| Actual test results | Run comprehensive_model_testing.py |
+
+---
+
+**Updated:** 2026-01-31
+**Project:** ChemAI

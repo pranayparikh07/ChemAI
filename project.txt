@@ -1,0 +1,12 @@
+Agent based molecular design and optimization.
+Traditional drug discovery takes time and is costly.
+Need:
+-Intelligent System
+-Automated System
+-Which Can Discover drug like compounds using AI
+
+Predict chemical properties using ML
+Optimize molecules for better drug likeness and lower toxicity
+Provide ranked list of best candidate compounds.
+
+

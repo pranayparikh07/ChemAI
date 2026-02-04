@@ -1,0 +1,282 @@
+================================================================================
+VISHWA - MONTH 1: MOLECULAR DATASET PREPARATION & FEATURE ENGINEERING
+================================================================================
+
+PRIMARY ROLE: Dataset Engineering & Feature Engineering
+TIMELINE: Month 1 (First Month)
+
+================================================================================
+TASK 1: DATASET ACQUISITION & PREPROCESSING
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 1.1 - Download and extract molecular datasets
+        - QM9 dataset (access: https://quantum-machines.gitlab.io/datasets/qm9/)
+        - ZINC database (publicly available)
+        - ChEMBL (already have locally: chembl_36/)
+        Output file: dataset_acquisition_log.txt
+        Directory: datasets/
+
+  [ ] 1.2 - Extract SMILES strings from databases
+        - From ChEMBL: SELECT canonical_smiles FROM compound_structures
+        - From QM9: Parse XYZ to SMILES conversion
+        - From ZINC: Extract canonical SMILES
+        Output: smiles_extraction_summary.txt
+        Directory: data/raw_smiles/
+
+  [ ] 1.3 - Implement data cleaning pipeline
+        - Remove duplicates
+        - Remove invalid SMILES
+        - Check for salt/solvent removal
+        - Remove molecules outside size limits (e.g., MW: 100-800)
+        Output file: data_cleaning_pipeline.py
+        Directory: scripts/
+
+  [ ] 1.4 - Data validation and profiling
+        - Count before/after cleaning
+        - Distribution analysis
+        - Statistical summaries
+        Output: data_validation_report.txt
+
+================================================================================
+TASK 2: MOLECULAR REPRESENTATION ENGINEERING
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 2.1 - Convert molecules to GRAPH representation
+        - Atoms = nodes, Bonds = edges
+        - Implement graph construction function
+        - Support for directed/undirected graphs
+        Output file: graph_constructor.py
+        Directory: data/graph_representations/
+
+  [ ] 2.2 - Extract ATOM-LEVEL features
+        - Atom type (C, N, O, S, P, F, Cl, Br, I, etc.)
+        - Valency (degree in molecule)
+        - Hybridization (sp, sp2, sp3)
+        - Formal charge
+        - Partial charges (MMFF94, GASTEIGER)
+        - Aromaticity
+        Output file: atom_feature_extractor.py
+        Directory: models/
+
+  [ ] 2.3 - Extract BOND-LEVEL features
+        - Bond type (single, double, triple, aromatic)
+        - Bond order
+        - Conjugation status
+        - Rotatable/fixed classification
+        Output file: bond_feature_extractor.py
+        Directory: models/
+
+  [ ] 2.4 - Implement fingerprint generation
+        - Morgan fingerprints (2048 bits, already used)
+        - RDKit descriptors (for ML models)
+        - Graph-based representations
+        Output file: fingerprint_generator.py
+        Directory: models/
+
+================================================================================
+TASK 3: FEATURE ENGINEERING & CANONICAL FORMS
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 3.1 - Canonical SMILES standardization
+        - Implement SMILES canonicalization
+        - Remove duplicates based on canonical form
+        - Handle tautomers and stereoisomers
+        Output file: smiles_standardizer.py
+        Directory: scripts/
+
+  [ ] 3.2 - Extract molecular PROPERTIES
+        - Molecular Weight (MW)
+        - Partition Coefficient (LogP)
+        - Hydrogen Bond Donors (HBD)
+        - Hydrogen Bond Acceptors (HBA)
+        - Polar Surface Area (PSA)
+        - Rotatable Bonds
+        - Aromatic rings
+        Output file: property_calculator.py
+        Directory: models/
+
+  [ ] 3.3 - Build FEATURE MATRIX
+        - Create feature vectors for each molecule
+        - Normalize/standardize features
+        - Handle missing values
+        - Feature scaling (StandardScaler, MinMaxScaler)
+        Output file: feature_matrix_builder.py
+        Directory: models/
+        Output data: features.pkl, features.csv
+
+  [ ] 3.4 - Drug-likeness metrics
+        - Lipinski's Rule of 5
+        - QED (Quantitative Estimation of Drug-likeness)
+        - Synthetic Accessibility Score
+        Output file: druglikeness_calculator.py
+        Directory: models/
+
+================================================================================
+TASK 4: DATASET STATISTICAL ANALYSIS
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 4.1 - Descriptive statistics
+        - Distribution of MW, LogP, PSA, HBD, HBA
+        - Mean, median, std dev, min, max
+        - Outlier identification
+        Output file: statistical_analysis.txt
+
+  [ ] 4.2 - Correlation analysis
+        - Feature correlation matrix
+        - Identify feature redundancy
+        - Select important features
+        Output file: correlation_analysis.csv
+
+  [ ] 4.3 - Data quality report
+        - Missing values percentage
+        - Outlier counts
+        - Duplicate analysis
+        - Data completeness metrics
+        Output file: data_quality_report.txt
+
+  [ ] 4.4 - Visualization of dataset
+        - Property distributions (histograms)
+        - Correlation heatmap
+        - PCA visualization
+        - t-SNE visualization
+        Output: visualizations.html
+
+================================================================================
+TASK 5: DATASET VERSIONING & DOCUMENTATION
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 5.1 - Create dataset metadata
+        - Dataset version, creation date, size
+        - Source information
+        - Processing parameters used
+        Output file: dataset_metadata.json
+
+  [ ] 5.2 - Document preprocessing steps
+        - Exact cleaning operations
+        - Feature extraction methods
+        - Scaling/normalization parameters
+        Output file: preprocessing_documentation.txt
+
+  [ ] 5.3 - Data splits
+        - Training set (70%)
+        - Validation set (15%)
+        - Test set (15%)
+        - Random seed for reproducibility
+        Output: train_val_test_split.txt
+
+  [ ] 5.4 - Create data loader scripts
+        - Load training data
+        - Load validation data
+        - Load test data
+        - Batch processing capability
+        Output file: data_loaders.py
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+
+TEAM_VISHWA/
+  ├── MONTH1_TASKS.txt (this file)
+  ├── datasets/
+  │   ├── qm9/
+  │   ├── zinc/
+  │   └── chembl/
+  ├── data/
+  │   ├── raw_smiles/
+  │   ├── cleaned_smiles/
+  │   ├── graph_representations/
+  │   └── features/
+  ├── scripts/
+  │   ├── data_cleaning_pipeline.py
+  │   ├── smiles_standardizer.py
+  │   └── feature_matrix_builder.py
+  ├── outputs/
+  │   ├── dataset_acquisition_log.txt
+  │   ├── data_validation_report.txt
+  │   ├── statistical_analysis.txt
+  │   └── preprocessing_documentation.txt
+  └── progress_log.txt
+
+================================================================================
+DELIVERABLES FOR MONTH 1
+================================================================================
+
+Output files (location: TEAM_VISHWA folder):
+  ✓ dataset_acquisition_log.txt
+  ✓ smiles_extraction_summary.txt
+  ✓ data_validation_report.txt
+  ✓ graph_constructor.py
+  ✓ atom_feature_extractor.py
+  ✓ bond_feature_extractor.py
+  ✓ fingerprint_generator.py
+  ✓ smiles_standardizer.py
+  ✓ property_calculator.py
+  ✓ feature_matrix_builder.py
+  ✓ druglikeness_calculator.py
+  ✓ statistical_analysis.txt
+  ✓ correlation_analysis.csv
+  ✓ data_quality_report.txt
+  ✓ visualizations.html
+  ✓ dataset_metadata.json
+  ✓ preprocessing_documentation.txt
+  ✓ data_loaders.py
+  ✓ month1_completion_report.txt
+
+Data outputs:
+  ✓ train_set.pkl (70% molecules)
+  ✓ val_set.pkl (15% molecules)
+  ✓ test_set.pkl (15% molecules)
+  ✓ feature_matrix.csv
+  ✓ features_scaled.pkl
+
+================================================================================
+DEPENDENCIES & COORDINATION
+================================================================================
+
+From Pranay:
+  - System architecture (for data flow specifications)
+  - Problem formulation (for dataset scope)
+
+To Shreya:
+  - Cleaned SMILES dataset (for KG entity extraction)
+  - Molecular representations (for KG node creation)
+  - Property values (for KG attribute tagging)
+
+================================================================================
+PROGRESS TRACKING
+================================================================================
+
+Week 1: Complete Task 1 (Dataset Acquisition & Preprocessing)
+        - Have cleaned data ready by end of week
+        Output: Minimum 50k clean SMILES
+
+Week 2: Complete Task 2 (Graph Representation & Features)
+        - Graph construction and atom/bond features
+        Output: Graph representations for all molecules
+
+Week 3: Complete Task 3 (Feature Engineering)
+        - Property calculations, canonical forms, feature matrix
+        Output: Feature matrix ready for ML
+
+Week 4: Complete Task 4 & 5 (Statistics & Documentation)
+        - Analysis, visualization, splits, data loaders
+        Output: Month 1 completion report
+
+Milestones:
+  - End of Week 1: 50k+ clean molecules with canonical SMILES
+  - End of Week 2: Graph representations + features extracted
+  - End of Week 3: Feature matrix with 10+ descriptors
+  - End of Week 4: Train/val/test splits + documentation
+
+Last Updated: 2026-02-02
+Next Review: Weekly

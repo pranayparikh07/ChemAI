@@ -1,0 +1,348 @@
+================================================================================
+SHREYA - KNOWLEDGE GRAPH SCHEMA DESIGN (COMPLETE)
+================================================================================
+
+Document: Knowledge Graph Schema & Ontology
+Date: February 2, 2026
+Status: ✓ COMPLETE
+
+================================================================================
+NODE TYPES (Entities in Knowledge Graph)
+================================================================================
+
+1. MOLECULE
+   Properties:
+     - molecule_id: Unique identifier (ChEMBL ID or auto-generated)
+     - smiles: Canonical SMILES string
+     - name: Common name or compound name
+     - molecular_weight: MW in Daltons
+     - logp: Partition coefficient
+     - qed_score: Drug-likeness score
+     - is_drug_like: Boolean
+     - source: Origin database (ChEMBL, ZINC, etc.)
+     - confidence: Data quality score (0-1)
+     - created_date: When added to KG
+     - last_updated: Last modification date
+   
+   Constraints:
+     - molecule_id: UNIQUE, NOT NULL
+     - smiles: NOT NULL
+     - Must have valid SMILES structure
+
+2. PROTEIN/TARGET
+   Properties:
+     - protein_id: UniProt ID or auto-generated
+     - uniprot_id: UniProt accession
+     - name: Protein name
+     - gene_name: Gene symbol
+     - organism: Species (human, mouse, etc.)
+     - sequence: Amino acid sequence (optional)
+     - molecular_function: GO term
+     - biological_process: GO term
+     - cellular_location: Localization
+     - disease_relevance: Related diseases
+     - source: UniProt, etc.
+     - confidence: Data quality (0-1)
+   
+   Constraints:
+     - protein_id: UNIQUE, NOT NULL
+     - uniprot_id: Indexed for fast lookup
+     - organism: Controlled vocabulary
+
+3. DISEASE
+   Properties:
+     - disease_id: Unique identifier (MESH ID or auto)
+     - name: Disease name
+     - mesh_id: MeSH identifier (if available)
+     - description: Disease description
+     - disease_type: Therapeutic area
+     - icd_code: ICD code (if available)
+   
+   Constraints:
+     - disease_id: UNIQUE, NOT NULL
+     - disease_type: Controlled vocabulary
+
+4. PATHWAY
+   Properties:
+     - pathway_id: KEGG pathway ID or auto
+     - name: Pathway name
+     - description: What the pathway does
+     - organism: Species
+     - database: KEGG, Reactome, etc.
+     - related_diseases: List of associated diseases
+   
+   Constraints:
+     - pathway_id: UNIQUE, NOT NULL
+     - organism: Controlled vocabulary
+
+5. BIOACTIVITY MEASUREMENT
+   Properties:
+     - activity_id: Unique measurement ID
+     - activity_type: IC50, EC50, Ki, etc.
+     - activity_value: Numeric value
+     - activity_unit: nM, μM, etc.
+     - pic50: Converted pIC50 (-log IC50 in nM)
+     - assay_type: Cell-based, biochemical, etc.
+     - source_database: ChEMBL, BindingDB, etc.
+     - publication: Research paper reference
+     - confidence: Data quality (0-1)
+   
+   Constraints:
+     - activity_id: UNIQUE
+     - activity_value: Positive number
+     - activity_type: Controlled vocabulary
+
+6. TOXICITY_ALERT
+   Properties:
+     - alert_id: Unique alert ID
+     - alert_name: Name of structural alert
+     - smarts_pattern: SMARTS pattern for detection
+     - toxicity_type: Hepatotoxicity, nephrotoxicity, etc.
+     - risk_level: LOW, MEDIUM, HIGH
+     - source: PAINS, BRENK, literature
+     - description: Why it's toxic
+   
+   Constraints:
+     - alert_id: UNIQUE
+     - risk_level: Controlled vocabulary
+     - smarts_pattern: Valid SMARTS
+
+7. CHEMICAL_REACTION
+   Properties:
+     - reaction_id: Unique identifier
+     - reaction_smarts: SMARTS pattern for reaction
+     - name: Reaction name
+     - reaction_type: Substitution, condensation, etc.
+     - difficulty: Synthetic difficulty (1-10)
+     - source_database: Reaxys, ChemSpider, etc.
+   
+   Constraints:
+     - reaction_id: UNIQUE
+     - reaction_smarts: Valid SMARTS
+
+8. LITERATURE_REFERENCE
+   Properties:
+     - reference_id: Unique ID
+     - pubmed_id: PubMed ID
+     - title: Publication title
+     - authors: Author list
+     - publication_date: Date published
+     - doi: Digital object identifier
+     - abstract: Paper abstract (optional)
+   
+   Constraints:
+     - reference_id: UNIQUE
+     - pubmed_id: Indexed for lookup
+
+================================================================================
+EDGE TYPES (Relationships)
+================================================================================
+
+1. MOLECULE TARGETS PROTEIN
+   Type: Directed (molecule → protein)
+   Properties:
+     - pIC50: Predicted bioactivity
+     - experimental_pIC50: Measured bioactivity (if available)
+     - assay_type: How it was measured
+     - confidence: Confidence score (0-1)
+     - evidence_count: Number of supporting sources
+   Weight: pIC50 value (higher = stronger)
+
+2. PROTEIN INVOLVED_IN PATHWAY
+   Type: Directed (protein → pathway)
+   Properties:
+     - role: Enzyme, substrate, regulator, etc.
+     - confidence: Role confidence (0-1)
+     - source: How we know this
+   Weight: Confidence score
+
+3. PROTEIN ASSOCIATED_WITH DISEASE
+   Type: Undirected (protein ↔ disease)
+   Properties:
+     - relationship_type: Causative, therapeutic target, biomarker
+     - evidence: Publication count
+     - confidence: Association confidence (0-1)
+   Weight: Confidence
+
+4. MOLECULE HAS_TOXICITY ALERT
+   Type: Directed (molecule → alert)
+   Properties:
+     - matches: How many times the SMARTS pattern matches
+     - risk_level: Inherited from alert
+     - confidence: Match confidence (0-1)
+   Weight: Risk score
+
+5. MOLECULE SIMILAR_TO MOLECULE
+   Type: Undirected (molecule ↔ molecule)
+   Properties:
+     - similarity_score: Tanimoto similarity (0-1)
+     - fingerprint_type: Morgan, ECFP, etc.
+     - shared_features: Which features are similar
+   Weight: Similarity score
+
+6. MOLECULE DERIVED_FROM MOLECULE
+   Type: Directed (molecule → parent)
+   Properties:
+     - modification: Type of change (substitution, etc.)
+     - generation: Which generation this is
+     - improvement: Change in objective score
+   Weight: Not weighted
+
+7. MOLECULE PART_OF PATHWAY
+   Type: Directed (molecule → pathway)
+   Properties:
+     - mechanism: How molecule affects pathway
+     - targets_in_pathway: Which proteins it targets
+     - confidence: Mechanism confidence
+   Weight: Confidence
+
+8. DISEASE SIMILAR_TO DISEASE
+   Type: Undirected (disease ↔ disease)
+   Properties:
+     - similarity_basis: Shared genes, pathways, etc.
+     - similarity_score: 0-1
+   Weight: Similarity
+
+9. REFERENCE MENTIONS MOLECULE
+   Type: Directed (reference → molecule)
+   Properties:
+     - context: What was studied
+     - finding: Key result from paper
+     - evidence_strength: Strong, moderate, weak
+   Weight: 1
+
+10. REFERENCE DESCRIBES PROTEIN
+    Type: Directed (reference → protein)
+    Properties:
+      - context: Research context
+      - finding: Key finding
+    Weight: 1
+
+================================================================================
+GLOBAL PROPERTIES FOR ALL NODES
+================================================================================
+
+Every node should have:
+  - id: Unique identifier (primary key)
+  - node_type: Type of node (Molecule, Protein, etc.)
+  - created_date: Creation timestamp
+  - last_updated: Last modification timestamp
+  - source: Where data came from
+  - confidence: Data quality/reliability (0-1 scale)
+  - tags: List of searchable tags
+  - description: Human-readable description (optional)
+
+Every edge should have:
+  - edge_id: Unique identifier (for queries)
+  - source_id: Source node ID
+  - target_id: Target node ID
+  - edge_type: Type of relationship
+  - weight: Strength/importance of relationship
+  - confidence: Confidence in relationship (0-1)
+  - evidence: Supporting evidence (count or references)
+  - created_date: When relationship was added
+  - source_reference: Publication or database origin
+
+================================================================================
+ONTOLOGY HIERARCHY
+================================================================================
+
+CHEMICAL_ENTITIES
+  ├── MOLECULE
+  │   ├── Drug
+  │   ├── Lead Compound
+  │   ├── Fragment
+  │   └── Natural Product
+  ├── TOXIC_COMPOUND
+  └── INTERMEDIATE
+
+BIOLOGICAL_ENTITIES
+  ├── PROTEIN
+  │   ├── Enzyme
+  │   ├── Receptor
+  │   ├── Channel
+  │   └── Structural Protein
+  ├── DISEASE
+  │   ├── Cancer
+  │   ├── Infectious Disease
+  │   ├── Cardiovascular
+  │   └── Neurological
+  └── PATHWAY
+      ├── Metabolic Pathway
+      ├── Signaling Pathway
+      └── Regulatory Pathway
+
+PHENOTYPES & FUNCTIONS
+  ├── Molecular Function
+  ├── Biological Process
+  └── Cellular Component
+
+DATA QUALITY
+  ├── Experimental Evidence
+  ├── Computational Prediction
+  ├── Literature Derived
+  └── Inferred
+
+================================================================================
+CONSTRAINT DEFINITIONS
+================================================================================
+
+Data Integrity:
+  ✓ All node IDs unique within type
+  ✓ All edges reference existing nodes
+  ✓ Confidence scores: 0 ≤ score ≤ 1
+  ✓ Weights positive (or null)
+
+SMILES Validation:
+  ✓ All molecule SMILES valid (can convert to RDKit mol)
+  ✓ Canonical form only (no variants)
+  ✓ No salt/solvent fragments
+
+Temporal Consistency:
+  ✓ created_date ≤ last_updated
+  ✓ All dates in ISO 8601 format
+
+Reference Integrity:
+  ✓ All PubMed IDs valid
+  ✓ All DOIs valid format
+
+================================================================================
+INDEXING STRATEGY
+================================================================================
+
+Indexes to Create (for query performance):
+  - Molecule: smiles, molecular_weight, qed_score
+  - Protein: uniprot_id, gene_name, organism
+  - Disease: mesh_id, disease_type
+  - Edge sources: (source_id, edge_type)
+  - Edge targets: (target_id, edge_type)
+  - Confidence scores (for filtering by quality)
+
+This enables:
+  ✓ Fast SMILES lookup
+  ✓ Efficient filtering by properties
+  ✓ Quick edge traversal
+  ✓ Confidence-based ranking
+
+================================================================================
+SCHEMA VALIDATION
+================================================================================
+
+Validation Rules:
+  1. Node type must be one of defined types
+  2. Properties must match node type schema
+  3. Edges must reference valid nodes
+  4. Edge types must be one of defined types
+  5. Confidence values: 0.0 ≤ x ≤ 1.0
+  6. All dates in ISO 8601 format
+
+Error Handling:
+  - Invalid property → Reject entry
+  - Missing required field → Default or reject
+  - Out-of-range value → Clamp or reject
+  - Invalid reference → Log error, skip edge
+
+================================================================================
+Document Status: ✓ COMPLETE
+Author: Shreya
+Date Created: 2026-02-02

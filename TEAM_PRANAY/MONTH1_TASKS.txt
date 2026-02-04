@@ -1,0 +1,148 @@
+================================================================================
+PRANAY - MONTH 1: LITERATURE & PROBLEM FORMALIZATION
+================================================================================
+
+PRIMARY ROLE: Literature Review & Conceptual Architecture Design
+TIMELINE: Month 1 (First Month)
+
+================================================================================
+TASK 1: STATE-OF-THE-ART LITERATURE REVIEW
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 1.1 - Review molecular generation methods
+        - Generative models (VAE, GAN, Diffusion models)
+        - SMILES-based vs Graph-based generation
+        - Molecular constraints and validity
+        - Key papers: autoregressive models, reinforcement learning approaches
+        Output: literature_generation_methods.txt
+
+  [ ] 1.2 - Reinforcement learning in chemistry
+        - Policy gradient methods for molecular optimization
+        - Reward function design for drug discovery
+        - Multi-objective optimization approaches
+        - Integration with chemical design
+        Output: rl_chemistry_summary.txt
+
+  [ ] 1.3 - Agentic systems in scientific discovery
+        - Multi-agent collaboration frameworks
+        - Autonomous decision-making loops
+        - Hierarchical agent orchestration
+        - Real examples in drug discovery AI
+        Output: agentic_systems_analysis.txt
+
+================================================================================
+TASK 2: GAP ANALYSIS & RESEARCH PROBLEM IDENTIFICATION
+================================================================================
+Status: [ ] Not Started
+
+Sub-tasks:
+  [ ] 2.1 - Identify lack of causal reasoning in current systems
+        - Where current methods fail to explain causality
+        - Why this matters for drug discovery
+        - Potential solutions
+        Output: causal_reasoning_gap.txt
+
+  [ ] 2.2 - Analyze absence of autonomous decision-making loops
+        - Current vs desired autonomous capabilities
+        - Feedback mechanisms needed
+        - Self-improvement strategies
+        Output: autonomous_loops_analysis.txt
+
+  [ ] 2.3 - Document other key gaps
+        - Multi-objective optimization challenges
+        - Knowledge integration issues
+        - Computational efficiency gaps
+        Output: other_gaps_summary.txt
+
+================================================================================
+TASK 3: RESEARCH PROBLEM FORMULATION
+================================================================================
+Status: [ ] Not Started
+
+Output files in this folder:
+  [ ] 3.1 - research_problem_statement.txt
+        - Clear problem definition
+        - Why it matters
+        - Current limitations
+        - Proposed approach
+
+  [ ] 3.2 - hypotheses.txt
+        - H1: What we believe about causal reasoning in drug discovery
+        - H2: What we believe about multi-agent autonomous systems
+        - H3: What we believe about knowledge graph reasoning
+        - H4: Performance improvements expected
+
+  [ ] 3.3 - system_architecture_conceptual.txt
+        - High-level system design
+        - Agent interactions
+        - Data flow between components
+        - Integration points
+
+================================================================================
+TASK 4: SYSTEM ARCHITECTURE AT CONCEPTUAL LEVEL
+================================================================================
+Status: [ ] Not Started
+
+Output deliverables:
+  [ ] 4.1 - architecture_overview.txt
+        - System components overview
+        - Agent roles and responsibilities
+        - Data pipeline design
+        - Knowledge graph integration
+
+  [ ] 4.2 - research_objectives.txt
+        - Primary research goal
+        - Secondary objectives
+        - Success metrics
+        - Experimental design
+
+  [ ] 4.3 - integration_requirements.txt
+        - How Vishwa's dataset work integrates
+        - How Shreya's KG work integrates
+        - Interface specifications
+        - Data format agreements
+
+================================================================================
+DELIVERABLES FOR MONTH 1
+================================================================================
+
+Primary outputs (in TEAM_PRANAY folder):
+  ✓ literature_generation_methods.txt
+  ✓ rl_chemistry_summary.txt
+  ✓ agentic_systems_analysis.txt
+  ✓ causal_reasoning_gap.txt
+  ✓ autonomous_loops_analysis.txt
+  ✓ research_problem_statement.txt
+  ✓ hypotheses.txt
+  ✓ system_architecture_conceptual.txt
+  ✓ research_objectives.txt
+  ✓ integration_requirements.txt
+
+Secondary output:
+  ✓ month1_completion_report.txt
+
+================================================================================
+DEPENDENCIES & COORDINATION
+================================================================================
+
+From Vishwa:
+  - Dataset structure and schema (needed for architecture design)
+  - SMILES format specifications
+
+From Shreya:
+  - Knowledge graph schema (needed for architecture)
+  - Ontology definitions
+
+================================================================================
+PROGRESS TRACKING
+================================================================================
+
+Week 1: Complete Tasks 1.1 - 1.3 (Literature Review)
+Week 2: Complete Task 2 (Gap Analysis)
+Week 3: Complete Task 3 (Problem Formulation)
+Week 4: Complete Task 4 + Final Report (Architecture & Integration)
+
+Last Updated: 2026-02-02
+Next Review: Check monthly
