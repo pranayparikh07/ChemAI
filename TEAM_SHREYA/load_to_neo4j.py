@@ -60,38 +60,50 @@ class Neo4jLoader:
             return
         
         df = pd.read_csv(csv_path)
+        loaded = 0
+        skipped = 0
         
         for idx, row in df.iterrows():
             query = """
-            CREATE (m:Molecule {
-                id: $id,
-                smiles: $smiles,
-                name: $name,
-                mw: $mw,
-                logp: $logp,
-                qed: $qed,
-                is_drug_like: $is_drug_like,
-                source: $source,
-                confidence: $confidence
-            })
+            MERGE (m:Molecule {id: $id})
+            ON CREATE SET
+                m.smiles = $smiles,
+                m.name = $name,
+                m.mw = $mw,
+                m.logp = $logp,
+                m.qed = $qed,
+                m.is_drug_like = $is_drug_like,
+                m.source = $source,
+                m.confidence = $confidence
+            ON MATCH SET
+                m.mw = COALESCE(m.mw, $mw),
+                m.logp = COALESCE(m.logp, $logp),
+                m.qed = COALESCE(m.qed, $qed)
+            RETURN m.id as created_id
             """
             
-            self.session.run(query, {
-                'id': row.get('id', f'mol_{idx}'),
-                'smiles': row.get('smiles', ''),
-                'name': row.get('name', ''),
-                'mw': float(row.get('MW', 0)),
-                'logp': float(row.get('LogP', 0)),
-                'qed': float(row.get('QED', 0)),
-                'is_drug_like': row.get('is_drug_like', True),
-                'source': row.get('source', 'ChEMBL'),
-                'confidence': float(row.get('confidence', 0.9))
-            })
+            try:
+                result = self.session.run(query, {
+                    'id': row.get('id', f'mol_{idx}'),
+                    'smiles': row.get('smiles', ''),
+                    'name': row.get('name', ''),
+                    'mw': float(row.get('MW', 0)),
+                    'logp': float(row.get('LogP', 0)),
+                    'qed': float(row.get('QED', 0)),
+                    'is_drug_like': row.get('is_drug_like', True),
+                    'source': row.get('source', 'ChEMBL'),
+                    'confidence': float(row.get('confidence', 0.9))
+                })
+                loaded += 1
+            except Exception as e:
+                skipped += 1
+                if skipped <= 5:  # Show first 5 errors
+                    print(f"  ⚠️  Skipped row {idx}: {str(e)[:50]}")
             
             if (idx + 1) % 1000 == 0:
-                print(f"  ✓ Loaded {idx + 1} molecules")
+                print(f"  ✓ Processed {idx + 1} rows (Loaded: {loaded}, Skipped: {skipped})")
         
-        print(f"✓ Total molecules loaded: {len(df)}")
+        print(f"✓ Total molecules loaded: {loaded}, Skipped: {skipped}")
     
     def _load_sample_molecules(self):
         """Load sample molecules for demo"""
@@ -139,36 +151,48 @@ class Neo4jLoader:
             return
         
         df = pd.read_csv(csv_path)
+        loaded = 0
+        skipped = 0
         
         for idx, row in df.iterrows():
             query = """
-            CREATE (p:Protein {
-                id: $id,
-                uniprot: $uniprot,
-                name: $name,
-                gene: $gene,
-                organism: $organism,
-                function: $function,
-                source: $source,
-                confidence: $confidence
-            })
+            MERGE (p:Protein {id: $id})
+            ON CREATE SET
+                p.uniprot = $uniprot,
+                p.name = $name,
+                p.gene = $gene,
+                p.organism = $organism,
+                p.function = $function,
+                p.source = $source,
+                p.confidence = $confidence
+            ON MATCH SET
+                p.uniprot = COALESCE(p.uniprot, $uniprot),
+                p.name = COALESCE(p.name, $name),
+                p.gene = COALESCE(p.gene, $gene)
+            RETURN p.id as created_id
             """
             
-            self.session.run(query, {
-                'id': row.get('id', f'prot_{idx}'),
-                'uniprot': row.get('uniprot', ''),
-                'name': row.get('name', ''),
-                'gene': row.get('gene', ''),
-                'organism': row.get('organism', 'Homo sapiens'),
-                'function': row.get('function', ''),
-                'source': row.get('source', 'ChEMBL'),
-                'confidence': float(row.get('confidence', 0.9))
-            })
+            try:
+                self.session.run(query, {
+                    'id': row.get('id', f'prot_{idx}'),
+                    'uniprot': row.get('uniprot', ''),
+                    'name': row.get('name', ''),
+                    'gene': row.get('gene', ''),
+                    'organism': row.get('organism', 'Homo sapiens'),
+                    'function': row.get('function', ''),
+                    'source': row.get('source', 'ChEMBL'),
+                    'confidence': float(row.get('confidence', 0.9))
+                })
+                loaded += 1
+            except Exception as e:
+                skipped += 1
+                if skipped <= 5:
+                    print(f"  ⚠️  Skipped row {idx}: {str(e)[:50]}")
             
             if (idx + 1) % 500 == 0:
-                print(f"  ✓ Loaded {idx + 1} proteins")
+                print(f"  ✓ Processed {idx + 1} rows (Loaded: {loaded}, Skipped: {skipped})")
         
-        print(f"✓ Total proteins loaded: {len(df)}")
+        print(f"✓ Total proteins loaded: {loaded}, Skipped: {skipped}")
     
     def _load_sample_proteins(self):
         """Load sample proteins for demo"""
@@ -213,17 +237,23 @@ class Neo4jLoader:
             return
         
         df = pd.read_csv(csv_path)
+        loaded = 0
+        skipped = 0
         
         for idx, row in df.iterrows():
             query = """
             MATCH (m:Molecule {id: $mol_id})
             MATCH (p:Protein {id: $prot_id})
-            CREATE (m)-[r:TARGETS {
-                pic50: $pic50,
-                activity_type: $activity_type,
-                confidence: $confidence,
-                source: $source
-            }]->(p)
+            MERGE (m)-[r:TARGETS {mol_id: $mol_id, prot_id: $prot_id}]->(p)
+            ON CREATE SET
+                r.pic50 = $pic50,
+                r.activity_type = $activity_type,
+                r.confidence = $confidence,
+                r.source = $source
+            ON MATCH SET
+                r.pic50 = COALESCE(r.pic50, $pic50),
+                r.confidence = COALESCE(r.confidence, $confidence)
+            RETURN r
             """
             
             try:
@@ -235,13 +265,16 @@ class Neo4jLoader:
                     'confidence': float(row.get('confidence', 0.9)),
                     'source': row.get('source', 'ChEMBL')
                 })
-            except:
-                pass  # Skip if molecule or protein not found
+                loaded += 1
+            except Exception as e:
+                skipped += 1
+                if skipped <= 5:
+                    print(f"  ⚠️  Skipped row {idx}: {str(e)[:50]}")
             
             if (idx + 1) % 5000 == 0:
-                print(f"  ✓ Loaded {idx + 1} bioactivity edges")
+                print(f"  ✓ Processed {idx + 1} rows (Loaded: {loaded}, Skipped: {skipped})")
         
-        print(f"✓ Total bioactivity edges loaded: {len(df)}")
+        print(f"✓ Total bioactivity edges loaded: {loaded}, Skipped: {skipped}")
     
     def _load_sample_bioactivity(self):
         """Load sample bioactivity edges for demo"""
@@ -290,16 +323,22 @@ class Neo4jLoader:
             return
         
         df = pd.read_csv(csv_path)
+        loaded = 0
+        skipped = 0
         
         for idx, row in df.iterrows():
             query = """
             MATCH (m1:Molecule {id: $mol1_id})
             MATCH (m2:Molecule {id: $mol2_id})
-            CREATE (m1)-[r:SIMILAR_TO {
-                similarity: $similarity,
-                method: $method,
-                confidence: $confidence
-            }]->(m2)
+            MERGE (m1)-[r:SIMILAR_TO {mol1_id: $mol1_id, mol2_id: $mol2_id}]->(m2)
+            ON CREATE SET
+                r.similarity = $similarity,
+                r.method = $method,
+                r.confidence = $confidence
+            ON MATCH SET
+                r.similarity = COALESCE(r.similarity, $similarity),
+                r.confidence = COALESCE(r.confidence, $confidence)
+            RETURN r
             """
             
             try:
@@ -310,13 +349,16 @@ class Neo4jLoader:
                     'method': row.get('method', 'Tanimoto'),
                     'confidence': float(row.get('confidence', 0.9))
                 })
-            except:
-                pass
+                loaded += 1
+            except Exception as e:
+                skipped += 1
+                if skipped <= 5:
+                    print(f"  ⚠️  Skipped row {idx}: {str(e)[:50]}")
             
             if (idx + 1) % 100 == 0:
-                print(f"  ✓ Loaded {idx + 1} similarity edges")
+                print(f"  ✓ Processed {idx + 1} rows (Loaded: {loaded}, Skipped: {skipped})")
         
-        print(f"✓ Total similarity edges loaded: {len(df)}")
+        print(f"✓ Total similarity edges loaded: {loaded}, Skipped: {skipped}")
     
     def _load_sample_similarity(self):
         """Load sample similarity edges for demo"""
